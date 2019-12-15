@@ -12,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
+using TripTrackerLive.BackService.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TripTrackerLive.BackService
 {
@@ -27,8 +29,10 @@ namespace TripTrackerLive.BackService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<Models.Repository>();
+            //services.AddTransient<Models.Repository>();
             services.AddControllers();
+
+            services.AddDbContext<TripContext>(options => options.UseSqlite("Data Source=TripTracker.db"));
 
             services.AddSwaggerGen(options =>
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Trip Tracker", Version = "v1" })
@@ -60,6 +64,10 @@ namespace TripTrackerLive.BackService
             {
                 endpoints.MapControllers();
             });
+
+
+
+            //TripContext.SeedData(app.ApplicationServices);
         }
     }
 }
